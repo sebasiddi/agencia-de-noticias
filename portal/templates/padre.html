@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Template Name: News Magazine
+Author: <a href="http://www.os-templates.com/">OS Templates</a>
+Author URI: http://www.os-templates.com/
+Licence: Free to use under our free template licence terms
+Licence URI: http://www.os-templates.com/template-terms
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+{% load static %}
+<title>Agencia de Noticias</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+<link rel="stylesheet" href="{% static 'portal/layout/styles/layout.css' %}" type="text/css" />
+<script type="text/javascript" src="{% static 'portal/layout/scripts/jquery.min.js' %}"></script>
+<!-- Homepage Specific -->
+<script type="text/javascript" src="{% static 'portal/layout/scripts/galleryviewthemes/jquery.easing.1.3.js' %}"></script>
+<script type="text/javascript" src="{% static 'portal/layout/scripts/galleryviewthemes/jquery.timers.1.2.js' %}"></script>
+<script type="text/javascript" src="{% static 'portal/layout/scripts/galleryviewthemes/jquery.galleryview.2.1.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'portal/layout/scripts/galleryviewthemes/jquery.galleryview.setup.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="icon" type="image/x-icon" href="{% static 'portal/dist/images/favicon.png' %}">
+
+
+<!-- / Homepage Specific -->
+</head>
+
+<body id="top">
+<header>
+  <div class="wrapper col0">
+  <div id="topline">
+    {% if request.user.is_authenticated %}
+    <p>|{{user.username}}| <img SRC= "{{url}}" alt="foto de perfil"  width="45" height="30"></p>
+    {% endif %}
+    <ul>
+      <li><a href="{% url 'nueva_publicacion' %}">Crear nueva publicación</a></li>
+      
+      {% if not request.user.is_authenticated %}
+        <li><a href="{% url 'Login' %}">Iniciar sesión</a></li>
+        <li><a href="{% url 'register' %}">Registrarse</a></li>
+      {% else %}
+        <li><a href="{% url 'mis_publicaciones' %}">Mis Publicaciones</a></li>  
+        <li><a href="{% url 'inbox' %}">Mensajes</a></li>  
+        <li><a href="{% url 'editar_perfil' %}">Editar perfil</a></li>
+        <li><a href="{% url 'logout' %}">Salir</a></li>
+      {% endif %}
+      
+    </ul>
+    <br class="clear" />
+  </div>
+</div>
+<!-- ####################################################################################################### -->
+<div class="wrapper" style="background-color:rgb(238, 242, 243);">
+  <div id="header">
+    <!--<div class="fl_left">
+      <h1><a href="{% url 'inicio' %}"><strong>A</strong>gencia de  <strong>N</strong>oticias</a></h1>
+      <p>Toda la información</p>
+    </div> -->
+    <div class="fl_left"><a href="{% url 'inicio' %}"><img src="{% static 'portal/images/demo/logo-468x60-ok.png' %}" alt="" /></a></div>
+    <br class="clear" />
+  </div>
+</div>
+<!-- ####################################################################################################### -->
+<div class="wrapper col2">
+  <div id="topbar">
+    <div id="topnav">
+      <ul>
+        <li><a href="{% url 'inicio' %}">Inicio</a></li>
+        <li><a href="{% url 'politica' %}">Política</a></li>
+        <li><a href="{% url 'economia' %}">Economía</a></li>
+        <li><a href="{% url 'sociedad' %}">Sociedad</a></li>
+        <li><a href="{% url 'deportes' %}">Deportes</a></li>
+      </ul>
+    </div>
+ 
+    <div id="search">
+      
+      <form action="{% url 'resultados' %}" method="GET">
+          <input type="text" name="texto" id="texto" value="" />
+          <input type="submit" style="height: 28px; width: 150px;" name="go" id="go" value="Buscar Noticias" />
+     
+      </form>
+    
+    </div>
+    <br class="clear" />
+  </div>
+</div>
+</header>
+
+
+<!-- Contenido Variable -->
+<div class="sticky-top">
+  <div class="text-bg-primary p-1">
+    <h2>
+
+<marquee behavior="" direction="">
+        
+  {% for n in noticias_titulos %}
+    |Últimos Títulos|  
+    {% if n.seccion == "politica" %}
+      {% with secc="Política" %}
+      <span class="badge bg-secondary">{{secc}}</span> {{n.titulo}}
+      {% endwith %}
+    {% elif n.seccion == "economia" %}
+      {% with secc="Economía" %}
+      <span class="badge bg-secondary">{{secc}}</span> {{n.titulo}}
+      {% endwith %}
+    {% elif n.seccion == "sociedad" %}
+      {% with secc="Sociedad" %}
+      <span class="badge bg-secondary">{{secc}}</span> {{n.titulo}}
+      {% endwith %}
+    {% elif n.seccion == "deportes" %}
+      {% with secc="Deportes" %}
+      <span class="badge bg-secondary">{{secc}}</span> {{n.titulo}}
+      {% endwith %}
+    {% endif %}
+  {% endfor %}
+  
+</marquee>
+
+</h2>
+</div>
+</div>
+
+{% block  contenido %}
+
+                
+{% endblock %}
+
+<!-- Footer -->
+<footer>
+<div class="wrapper">
+  <div id="socialise">
+    <ul>
+      <li><a href="#"><img src="{% static 'portal/layout/images/facebook.gif' %}" alt="facebook" width="20" height="20" /><span>Facebook</span></a></li>
+      <li><a href="#"><img src="{% static 'portal/layout/images/rss.gif' %}" alt="rss" width="20" height="20" /><span>Feed</span></a></li>
+      <li class="last"><a href="#"><img src="{% static 'portal/layout/images/twitter.gif' %}" alt="twitter" width="20" height="20" /><span>Twitter</span></a></li>
+    </ul>
+
+<div class="wrapper col8">
+  <div id="copyright">
+    <p class="fl_right">
+      <a href="{% url 'about' %}">Acerca de</a>
+    </p>
+     
+    <p class="fl_right">Copyleft &copy; 2022 - Todos los derechos e izquierdos bien puestos - <a href="inicio">Agencia de noticias</a></p>
+    <p class="fl_right">El Template lo bajé de <a target="_blank" href="http://www.os-templates.com/" title="Free Website Templates">OS Templates</a></p>
+    <br class="clear" />
+  </div>
+</div>
+</footer>
+</body>
+</html>

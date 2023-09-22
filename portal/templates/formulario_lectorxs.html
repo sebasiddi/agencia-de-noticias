@@ -1,0 +1,45 @@
+{% extends "padre.html" %}
+
+{% load static %}
+
+{% block contenido %}
+
+
+<div class="wrapper">
+    <div id="hpage_cats">
+        <h1>Registrarse</h1>
+
+<form action="formulario_lectorxs" method="POST">
+    {% csrf_token %}
+
+    <p>Nombre:</p>
+    <input type="text" name="nombre_lectorxs" required>
+    <br>
+    <br>
+    <p>Contraseña:</p>
+    <input type="password" name="pass_lectorxs" required>
+    <br>
+    <br>
+    <p>E-mail:</p>
+    <input type="email" name="email_lectorxs" required>
+    <br>
+    <br>
+    <p>DNI</p>
+    <input type="number" name="dni_lectorxs" required>
+    <br>
+    <br>
+    <p>Número de Tarjeta de Crédito</p>
+    <input type="number" name="nro_tarjeta_crédito" required>
+    <br>
+    <br>
+    <p>Modo de Suscripción</p>
+    <select name="modo_suscripcion" required>
+        <option value="mensual" selected>Mensual</option>
+        <option value="anual">Anual</option>
+    </select>
+
+    <input type="submit" value="Enviar">
+</form>
+
+
+{% endblock %}

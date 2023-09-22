@@ -1,0 +1,63 @@
+{% extends "padre.html" %}
+
+{% load static %}
+
+{% block contenido %}
+
+<div class="wrapper">
+  <div id="hpage_cats">
+    {% for n in noticia_lectura %}
+      {% if n.publicado %}
+        <p>
+          <strong>
+            <div class="text-bg-light p-4">  
+              <h1>{{n.titulo}}</h1>
+            </div>
+          </strong>
+        </p>
+        <p align="justify">{{n.bajada}}</p>
+        <p align="justify">{{n.cuerpo}}</p>
+        <img src="/media/{{n.img}}" alt="imagen de {{n.titulo}}" height="500" width="900">
+        <p></p>
+        <p>Sección: 
+          {% if n.seccion == "politica" %}
+            {% with secc="Política" %}
+            <a href="{% url 'politica' %}"><span class="badge bg-secondary">{{secc}}</span> </a>
+            {% endwith %}
+          {% elif n.seccion == "economia" %}
+            {% with secc="Economía" %}
+            <a href="{% url 'economia' %}"><span class="badge bg-secondary">{{secc}}</span></a>
+            {% endwith %}
+          {% elif n.seccion == "sociedad" %}
+            {% with secc="Sociedad" %}
+            <a href="{% url 'sociedad' %}"><span class="badge bg-secondary">{{secc}} </span></a>
+            {% endwith %}
+          {% elif n.seccion == "deportes" %}
+            {% with secc="Deportes" %}
+            <a href="{% url 'deportes' %}"><span class="badge bg-secondary">{{secc}}</span></a>
+            {% endwith %}
+          {% endif %}
+        </p>
+        <p>Autor/a: {{n.nombre_user}}</p>
+        <p>Fecha: {{n.fecha}}</p>
+        <p>ID: {{n.id}}</p>
+ 
+    <a href="{% url 'inicio' %}"><button type="button" class="btn btn-success"> <i class="fa-solid fa-newspaper"></i> Volver al inicio</button></a>
+    {% if request.user.is_authenticated %}
+      {% if user.id == n.id_user %}
+        <a href="{% url 'editar_publicacion' n.id %}"><button type="button" class="btn btn-primary"></i> Editar</button></a>
+        <a class="btn btn-danger" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">Borrar</a>
+        <div class="collapse" id="collapseExample">
+          <div class="card card-body">
+            ¿Borrar definitivamente?<a href="{% url 'borrar_publicacion' n.id %}"><button type="button" class="btn btn-danger"><i class="fa-solid fa-square-minus"></i> Si</button></a>
+          </div>
+        </div>
+      {% endif %}
+    {% endif %}
+
+    {% endif %}
+    {% endfor %}
+  </div>
+</dv>
+
+{% endblock %}
